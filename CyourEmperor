@@ -1,0 +1,191 @@
+#include "stdio.h"
+#include "stdlib.h"
+
+/*声明结构体不分配空间，只有定义了才会分配*/
+typedef struct Node{
+
+	int data;
+
+	struct Node * Pnext;//这里会有点疑问，结构体还未
+
+}Node1 ,* Pnode;//注意先声明后使用
+
+
+int List_creat(Pnode Phead){
+
+	int length;
+
+	int value;
+
+	Pnode Ptail = Phead;
+
+	printf("请输入链表的元素个数\n");
+
+	scanf("%d",&length);//需验证处
+
+	for(int i=0;i<length;i++){
+	
+	printf("请输入第%d个元素的值\n",i+1);
+
+	scanf("%d",&value);
+
+	Pnode Pnew  = (Pnode)malloc(sizeof(Node));
+		if(Phead == NULL){
+			printf("申请空间失败\n");
+			return 0;
+		}
+	Pnew->data = value;
+
+	Pnew->Pnext = NULL;
+
+	Ptail->Pnext = Pnew;
+
+	Ptail = Pnew;
+	
+	}
+
+	return 0;
+
+}
+
+void List_traverse(Pnode Phead){
+
+	Pnode Preplace = Phead;
+	while(Preplace->Pnext != NULL){
+	
+		printf("%d\t",Preplace->Pnext->data);
+
+		Preplace = Preplace->Pnext;
+	
+	}
+
+}
+
+int List_counter(Pnode Phead){
+
+	if(Phead->Pnext == NULL)
+		printf("链表为空\n");
+
+	int length = 0;
+
+	Pnode counter = Phead;
+
+	while(counter->Pnext != NULL){
+	
+		length++;
+
+		counter = counter->Pnext;
+
+	}
+
+	return length;
+
+}
+
+int List_insert(Pnode Phead,int value,int pos){
+	
+	int i = 1;
+
+	Pnode Preplace = Phead;
+
+	int length = List_counter(Preplace);
+
+	if(pos<1 || pos >length+1)
+		printf("插入位置错误");
+
+	Pnode Preplace2 = Phead;
+
+		Pnode Pnew  = (Pnode)malloc(sizeof(Node));
+
+		if(Phead == NULL){
+			printf("申请空间失败\n");
+			return 0;
+		}
+
+		Pnew->data = value;
+		Pnew->Pnext = NULL;
+
+		//while(i < pos){
+
+		//	Preplace2 = Preplace2->Pnext;
+		//	i++;
+
+		//}
+		//	Pnew->Pnext = Preplace2->Pnext;
+
+		//	Preplace2->Pnext = Pnew;
+
+		//	return 0;
+
+			for(int i =1;i<=pos;i++,Preplace2 = Preplace2->Pnext){
+			
+				if(i == pos){
+
+				Pnew->Pnext = Preplace2->Pnext;
+
+				Preplace2->Pnext = Pnew;
+
+				}
+			}
+			return 0;
+}
+
+int List_delete(Pnode Phead,int pos){
+
+		int i = 1;
+
+		Pnode Preplace = Phead;
+
+		if(Phead->Pnext == NULL)
+			printf("链表为空\n");
+
+		int length = List_counter(Preplace);
+			
+		if(pos<1 || pos>length){
+
+			printf("输入错误\n");
+			return 0;
+		}
+
+		while(i<pos)
+		{
+		
+			Preplace = Preplace->Pnext;
+			i++;
+		}
+
+		Preplace->Pnext = Preplace->Pnext->Pnext;
+
+		return 0;
+
+}
+
+void main(){
+
+	Pnode Phead = (Pnode)malloc(sizeof(Node));
+
+	if(Phead == NULL)
+	printf("申请空间失败\n");
+
+	List_creat(Phead);
+
+	printf("\n第一次遍历\n");
+
+	List_traverse(Phead);
+
+	//int i = List_counter(Phead);
+	//printf("链表有%d个元素",i);
+
+	List_insert(Phead,555,5);
+
+	printf("\n第二次遍历\n");
+
+	List_traverse(Phead);
+
+	List_delete(Phead,1);
+
+	printf("\n第三次遍历\n");
+
+	List_traverse(Phead);
+
+}
